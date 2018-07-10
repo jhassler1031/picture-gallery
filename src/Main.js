@@ -4,8 +4,12 @@ import './Main.css';
 class Main extends Component {
   render() {
     return(
-      <div className="testing">
-        <p>Testing</p>
+      <div className="Images">
+        <div className="container">
+          <div className="row justify-content-center">
+
+          </div>
+        </div>
       </div>
     );
   }
