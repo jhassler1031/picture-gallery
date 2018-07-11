@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+
+import Image from './Image.js';
+import ImageForm from './ImageForm';
+
 import './Main.css';
 
 let httpCats = [
@@ -55,15 +59,40 @@ let httpCats = [
 ]
 
 class Main extends Component {
-  render() {
 
-    let catPics = httpCats.map((cat)=> {
+  //Set the initial value of state in the constructor
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      httpCats: httpCats
+    }
+    //everytime you write a custom method, you have to bind it !!!!!!!!!!!!!!!!
+    this._removeImage = this._removeImage.bind(this);
+    this._addImage = this._addImage.bind(this);
+  }
+
+  _removeImage(image) {
+    let images = this.state.httpCats;
+    //Can use split or splice here, splice needs indexOf on the array
+    // images.split(image);
+    images.splice(images.indexOf(image), 1);
+    this.setState({images});
+  }
+
+  _addImage(image) {
+    let images = this.state.httpCats;
+    images.push(image);
+    this.setState({images});
+  }
+
+  render() {
+    //need to be able to access "this" within function within map
+    //this._removeImage won't work, set self to this so it can be accessed in the function
+    let self = this;
+    let $catPics = this.state.httpCats.map((cat)=> {
       return (
-        <div key={cat.id} className="col-12 col-md-6 picTile">
-          <div className="catPic">
-            <img src={cat.link} alt="Picture of HTTP Cat"/>
-          </div>
-        </div>
+        <Image key={cat.id} cat={cat} removeImage={()=>self._removeImage(cat)} />
       )
     });
 
@@ -71,7 +100,11 @@ class Main extends Component {
       <div className="Images">
         <div className="container">
           <div className="row justify-content-center">
-            {catPics}
+            {$catPics}
+          </div>
+
+          <div className="row justify-content-center">
+            <ImageForm addImage={this._addImage}/>
           </div>
         </div>
       </div>
